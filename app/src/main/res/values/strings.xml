@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Vortex</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <!-- Strings related to register -->
+    <string name="prompt_password">Password</string>
+    <string name="prompt_retype_password">Retype password</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_password_is_not_matching">Password is not matching with previous</string>
+    <string name="error_field_required">This field is required</string>
+</resources>
