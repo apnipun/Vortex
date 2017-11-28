@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Profile extends AppCompatActivity {
-    ImageView profilePic;
+  CircleImageView profilePic;
     String profilePicUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +21,7 @@ public class Profile extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         profilePicUrl = bundle.getString("imgurl");
-        profilePic = (ImageView) findViewById(R.id.profilepic);
+        profilePic = (CircleImageView) findViewById(R.id.profilepic);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
