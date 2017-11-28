@@ -77,12 +77,16 @@ public class OrganizerLogin extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            String id = response.getString("id");
+                            String fname = response.getString("fname");
                             String imgurl = response.getString("imgurl");
                             String msg = response.getString("msg");
                             if( msg.equals("success") ){
                                 Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
+                                b.putString("id", id.toString());
+                                b.putString("fname", fname.toString());
                                 b.putString("imgurl", imgurl.toString());
                                 l.putExtras(b);
 
