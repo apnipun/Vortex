@@ -30,7 +30,7 @@ public class OrganizerLogin extends AppCompatActivity {
     Button register;
     RequestQueue requestQueue;
 
-    String url = "http://10.10.18.125:3000/login/";
+    String url = "http://192.168.1.100:3000/login/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +77,13 @@ public class OrganizerLogin extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String id = response.getString("id");
-                            String fname = response.getString("fname");
-                            String imgurl = response.getString("imgurl");
                             String msg = response.getString("msg");
+
                             if( msg.equals("success") ){
+
+                                String id = response.getString("id");
+                                String fname = response.getString("fname");
+                                String imgurl = response.getString("imgurl");
                                 Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
@@ -89,10 +91,8 @@ public class OrganizerLogin extends AppCompatActivity {
                                 b.putString("fname", fname.toString());
                                 b.putString("imgurl", imgurl.toString());
                                 l.putExtras(b);
-
                                 startActivity(l);
-                            }else
-                            {
+                            }else{
                                 Toast.makeText(getApplicationContext(),"Incorrect email or password", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {

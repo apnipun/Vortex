@@ -30,7 +30,7 @@ public class SupplierLogin extends AppCompatActivity {
     Button register;
     RequestQueue requestQueue;
 
-    String url = "http://10.10.18.125:3000/login/";
+    String url = "http://192.168.1.100:3000/login/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

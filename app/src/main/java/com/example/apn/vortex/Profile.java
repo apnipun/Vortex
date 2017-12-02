@@ -36,7 +36,7 @@ public class Profile extends AppCompatActivity {
   TextView userName;
     String profilePicUrl,id,fname;
     Bitmap bitmap;
-    String uploadImgUrl = "http://10.10.18.125:3000/upload/";
+    String uploadImgUrl = "http://192.168.1.100:3000/upload/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
