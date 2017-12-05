@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
@@ -32,11 +34,14 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Profile extends AppCompatActivity {
-  CircleImageView profilePic;
-  TextView userName;
+
+    CircleImageView profilePic;
+    TextView userName;
     String profilePicUrl,id,fname;
     Bitmap bitmap;
-    String uploadImgUrl = "http://192.168.1.100:3000/upload/";
+    UserSessionManager session;
+
+    String uploadImgUrl = "http://10.10.11.144:3000/upload/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +49,19 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+        profilePic = (CircleImageView) findViewById(R.id.profilepic);
+        userName = (TextView) findViewById(R.id.username);
+
+        session = new UserSessionManager(getApplicationContext());
+
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
         fname = bundle.getString("fname");
         profilePicUrl = bundle.getString("imgurl");
 
-        profilePic = (CircleImageView) findViewById(R.id.profilepic);
-        userName = (TextView) findViewById(R.id.username);
-
         userName.setText(fname);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setProfilePic();
         profilePic.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +71,10 @@ public class Profile extends AppCompatActivity {
                 startActivityForResult(i, 100);
             }
         });
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -142,8 +152,6 @@ public class Profile extends AppCompatActivity {
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -156,6 +164,14 @@ public class Profile extends AppCompatActivity {
     public void setProfilePic(){
         Picasso.with(getApplicationContext()).load(profilePicUrl).into(profilePic);
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(Profile.this,MainActivity.class));
+        finish();
     }
 
 }

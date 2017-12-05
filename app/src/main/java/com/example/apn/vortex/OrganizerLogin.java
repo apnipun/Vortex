@@ -30,19 +30,22 @@ public class OrganizerLogin extends AppCompatActivity {
     Button register;
     RequestQueue requestQueue;
 
-    String url = "http://192.168.1.100:3000/login/";
+    UserSessionManager session;
+
+    String url = "http://10.10.11.144:3000/login/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organizer_login);
 
-
         emailInput = (EditText)findViewById(R.id.email);
         pswrdInput = (EditText)findViewById(R.id.password);
         login = (Button)findViewById(R.id.button);
         requestQueue = Volley.newRequestQueue(this);
         register = (Button) findViewById(R.id.loginRegister);
+
+        session = new UserSessionManager(getApplicationContext());
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +84,15 @@ public class OrganizerLogin extends AppCompatActivity {
 
                             if( msg.equals("success") ){
 
+                                Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
+
+                                session.createUserLoginSession(emailInput.getText().toString(),
+                                        pswrdInput.getText().toString());
+
                                 String id = response.getString("id");
                                 String fname = response.getString("fname");
                                 String imgurl = response.getString("imgurl");
-                                Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
+
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
                                 b.putString("id", id.toString());
