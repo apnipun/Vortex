@@ -38,6 +38,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
     EditText eventDate,eventTime;
     Button themePhoto,createEvent;
     Bitmap bitmap;
+    String id;
     String createventUrl = "http://10.10.11.144:3000/createvent/";
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -60,6 +61,9 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
 
         eventDate.setOnClickListener(this);
         eventTime.setOnClickListener(this);
+
+        Bundle bundle = getIntent().getExtras();
+        id = bundle.getString("id");
 
        themePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +133,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+                params.put("id",id.toString());
                 params.put("ename",eventName.getText().toString());
                 params.put("edate",eventDate.getText().toString());
                 params.put("etime",eventTime.getText().toString());
@@ -142,7 +147,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
                 long imagename = System.currentTimeMillis();
-                params.put("pic", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                params.put("themePic", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
                 return params;
             }
         };

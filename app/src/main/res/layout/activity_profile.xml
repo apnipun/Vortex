@@ -173,14 +173,13 @@
                 android:layout_gravity="center_vertical"
                 android:text="Create an Event"/>
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_marginLeft="100dp"
-                android:id="@+id/floatingActionButton"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/addevent"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:clickable="true"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                android:layout_marginLeft="60dp"
+                android:src="@drawable/ic_add_circle_black_24dp"
+                />
 
 
         </LinearLayout>

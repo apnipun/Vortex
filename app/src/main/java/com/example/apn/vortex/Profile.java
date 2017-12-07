@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Profile extends AppCompatActivity {
 
-    CircleImageView profilePic;
+    CircleImageView profilePic,addEvent;
     TextView userName;
     String profilePicUrl,id,fname;
     Bitmap bitmap;
@@ -51,6 +51,7 @@ public class Profile extends AppCompatActivity {
 
 
         profilePic = (CircleImageView) findViewById(R.id.profilepic);
+        addEvent = (CircleImageView) findViewById(R.id.addevent);
         userName = (TextView) findViewById(R.id.username);
 
         session = new UserSessionManager(getApplicationContext());
@@ -69,6 +70,18 @@ public class Profile extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, 100);
+            }
+        });
+
+
+        addEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent o = new Intent(Profile.this,CreateEvents.class);
+                Bundle b = new Bundle();
+                b.putString("id", id.toString());
+                o.putExtras(b);
+                startActivity(o);
             }
         });
 
