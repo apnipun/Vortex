@@ -109,10 +109,6 @@ public class Profile extends AppCompatActivity {
 
     private void uploadBitmap(final Bitmap bitmap) {
 
-
-       // final String tags = editTextTags.getText().toString();
-
-
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST,uploadImgUrl,
                 new Response.Listener<NetworkResponse>() {
                     @Override
