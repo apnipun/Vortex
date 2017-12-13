@@ -1,5 +1,6 @@
 package com.example.apn.vortex;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,7 +10,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,20 +25,28 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String email,password;
+    String email,password,proimgurl;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     UserSessionManager session;
     RequestQueue requestQueue;
+    NavigationView navigationView;
+    CircleImageView Pic;
+    TextView userEmail;
 
     String loginurl = "http://10.10.11.144:3000/login/";
 
@@ -39,23 +54,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this,drawer,R.string.open,R.string.close);
         requestQueue = Volley.newRequestQueue(this);
-
         session = new UserSessionManager(getApplicationContext());
+
+
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        navigationView.getMenu().clear();
+        if(session.checkLogin() == true){
+            navigationView.inflateMenu(R.menu.drawermenu2);
+
+        }else {
+            navigationView.inflateMenu(R.menu.drawermenu);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(toggle.onOptionsItemSelected(item)){
-            return true;
+            if(session.checkLogin() == true){
+               setUserInfoToDrawer();
+            }else{
+
+                Pic = (CircleImageView) findViewById(R.id.drawerproimg);
+                userEmail =(TextView) findViewById(R.id.drawerproname);
+
+                userEmail.setText("User");
+
+                Picasso.with(getApplicationContext()).load(R.drawable.user).into(Pic);
+            }
+
+           return true;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -94,10 +140,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             case R.id.logout:
                 session.logoutUser();
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.drawermenu);
                 break;
             case R.id.about:
-                Intent ab = new Intent(MainActivity.this,CreateEvents.class);
-                startActivity(ab);
                 break;
 
         }
@@ -117,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          password = user.get(UserSessionManager.KEY_PASSWORD);
 
 
+
+
         Map<String, String> jsonParams = new HashMap<String, String>();
         jsonParams.put("email",email.toString());
         jsonParams.put("password",password.toString());
@@ -133,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
 
                                 String id = response.getString("id");
-                                String fname = response.getString("fname");
+                                String  fname = response.getString("fname");
                                 String imgurl = response.getString("imgurl");
 
                                 Intent l = new Intent(MainActivity.this,Profile.class);
@@ -165,6 +213,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         requestQueue.add(jsonObjectRequest);
+    }
+    public void setUserInfoToDrawer(){
+
+        Pic = (CircleImageView) findViewById(R.id.drawerproimg);
+        userEmail =(TextView) findViewById(R.id.drawerproname);
+
+        HashMap<String, String> user = session.getUserDetails();
+
+        proimgurl = user.get(UserSessionManager.KEY_IMGURL);
+        email = user.get(UserSessionManager.KEY_EMAIL);
+
+        userEmail.setText(email);
+
+        Picasso.with(getApplicationContext()).load(proimgurl).into(Pic);
+
     }
 
 

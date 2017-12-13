@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+   <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,15 +13,18 @@
     android:orientation="vertical"
     >
     <RelativeLayout
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="300dp">
         <LinearLayout
+            android:focusableInTouchMode="true"
             android:background="@drawable/gradientbackground"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:focusableInTouchMode="true"
                 android:id="@+id/profilepic"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
@@ -119,6 +126,7 @@
         </android.support.v7.widget.CardView>
 
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -167,6 +175,7 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_event_black_24dp"/>
             <TextView
+                android:layout_marginTop="-10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
@@ -181,11 +190,17 @@
                 android:src="@drawable/ic_add_circle_black_24dp"
                 />
 
-
         </LinearLayout>
 
 
     </LinearLayout>
+       <android.support.v7.widget.RecyclerView
+           android:layout_marginTop="20dp"
+           android:focusableInTouchMode="false"
+           android:id="@+id/recyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
+   </LinearLayout>
 
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

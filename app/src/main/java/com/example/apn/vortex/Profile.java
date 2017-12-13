@@ -1,11 +1,15 @@
 package com.example.apn.vortex;
 
+import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,15 +24,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,6 +49,12 @@ public class Profile extends AppCompatActivity {
     Bitmap bitmap;
     UserSessionManager session;
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+
+    private List<EventListItem> eventListItems;
+
+    String eventsUrl = "http://10.10.11.144:3000/geteventdata/";
     String uploadImgUrl = "http://10.10.11.144:3000/upload/";
 
     @Override
@@ -53,6 +67,11 @@ public class Profile extends AppCompatActivity {
         profilePic = (CircleImageView) findViewById(R.id.profilepic);
         addEvent = (CircleImageView) findViewById(R.id.addevent);
         userName = (TextView) findViewById(R.id.username);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         session = new UserSessionManager(getApplicationContext());
 
@@ -85,6 +104,10 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+
+        eventListItems = new ArrayList<>();
+
+        loadRecyclerViewData();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -121,6 +144,7 @@ public class Profile extends AppCompatActivity {
 
 
     private void uploadBitmap(final Bitmap bitmap) {
+
 
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST,uploadImgUrl,
                 new Response.Listener<NetworkResponse>() {
@@ -160,6 +184,60 @@ public class Profile extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
     }
+
+
+    private void loadRecyclerViewData(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading Data...");
+        progressDialog.show();
+
+        Map<String, String> jsonParams = new HashMap<String, String>();
+        jsonParams.put("id",id.toString());
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,eventsUrl,new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONArray array = response.getJSONArray("events");
+
+                            for (int i = 0 ;i<array.length(); i++){
+                                JSONObject o = array.getJSONObject(i);
+                                EventListItem eventItem = new EventListItem(
+                                        o.getString("ename"),
+                                        o.getString("edate"),
+                                        o.getString("eimgurl")
+                                );
+                                eventListItems.add(eventItem);
+                            }
+                            adapter = new EventAdapter(eventListItems,getApplicationContext());
+                            recyclerView.setAdapter(adapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(),"Connection Fail", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+        );
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

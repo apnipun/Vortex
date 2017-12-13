@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -35,11 +36,16 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CreateEvents extends AppCompatActivity implements View.OnClickListener {
+    UserSessionManager session;
+    String email,password;
+    RequestQueue requestQueue;
     EditText eventDate,eventTime;
     Button themePhoto,createEvent;
     Bitmap bitmap;
     String id;
+    String loginurl = "http://10.10.11.144:3000/login/";
     String createventUrl = "http://10.10.11.144:3000/createvent/";
+
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     EditText eventName, eventVanue, eventLocation, eventDescription;
@@ -57,6 +63,9 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
         createEvent  = (Button) findViewById(R.id.create);
         eventDate = (EditText) findViewById(R.id.editText5);
         eventTime = (EditText) findViewById(R.id.editText6);
+
+        session = new UserSessionManager(getApplicationContext());
+        requestQueue = Volley.newRequestQueue(this);
 
 
         eventDate.setOnClickListener(this);
@@ -93,8 +102,6 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
             try {
 
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                //uploadBitmap(bitmap);
-
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -118,6 +125,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Toast.makeText(getApplicationContext(),  obj.getString("msg"), Toast.LENGTH_SHORT).show();
+                            userLogin();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -155,6 +163,67 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
 
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
     }
+
+
+    public void userLogin(){
+
+        HashMap<String, String> user = session.getUserDetails();
+
+
+        email = user.get(UserSessionManager.KEY_EMAIL);
+        password = user.get(UserSessionManager.KEY_PASSWORD);
+
+
+        Map<String, String> jsonParams = new HashMap<String, String>();
+        jsonParams.put("email",email.toString());
+        jsonParams.put("password",password.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,loginurl,new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String msg = response.getString("msg");
+
+                            if( msg.equals("success") ){
+
+                                Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
+
+                                String id = response.getString("id");
+                                String fname = response.getString("fname");
+                                String imgurl = response.getString("imgurl");
+
+                                Intent l = new Intent(CreateEvents.this,Profile.class);
+                                Bundle b = new Bundle();
+                                b.putString("id", id.toString());
+                                b.putString("fname", fname.toString());
+                                b.putString("imgurl", imgurl.toString());
+                                l.putExtras(b);
+                                startActivity(l);
+                            }else{
+                                Toast.makeText(getApplicationContext(),"Incorrect email or password", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(),"Connection Fail", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+        );
+
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     @Override
     public void onClick(View v) {

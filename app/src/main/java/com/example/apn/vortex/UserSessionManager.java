@@ -35,6 +35,8 @@ public class UserSessionManager {
 
     public static final String KEY_PASSWORD = "password";
 
+    public static final String KEY_IMGURL = "imgurl";
+
 
     public static final String KEY_EMAIL = "email";
 
@@ -46,15 +48,12 @@ public class UserSessionManager {
     }
 
 
-    public void createUserLoginSession(String email, String password){
+    public void createUserLoginSession(String email, String password,String imgurl){
 
         editor.putBoolean(IS_USER_LOGIN, true);
-
-
         editor.putString(KEY_EMAIL, email);
-
-
         editor.putString(KEY_PASSWORD, password);
+        editor.putString(KEY_IMGURL, imgurl );
 
 
         editor.commit();
@@ -79,6 +78,8 @@ public class UserSessionManager {
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
 
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
+
+        user.put(KEY_IMGURL, pref.getString(KEY_IMGURL, null));
 
         return user;
     }

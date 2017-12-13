@@ -22,6 +22,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class OrganizerLogin extends AppCompatActivity {
 
     EditText emailInput;
@@ -45,6 +47,7 @@ public class OrganizerLogin extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         register = (Button) findViewById(R.id.loginRegister);
 
+
         session = new UserSessionManager(getApplicationContext());
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +63,7 @@ public class OrganizerLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 userLogin();
+
             }
         });
 
@@ -86,12 +90,12 @@ public class OrganizerLogin extends AppCompatActivity {
 
                                 Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
 
-                                session.createUserLoginSession(emailInput.getText().toString(),
-                                        pswrdInput.getText().toString());
-
                                 String id = response.getString("id");
                                 String fname = response.getString("fname");
                                 String imgurl = response.getString("imgurl");
+
+                                session.createUserLoginSession(emailInput.getText().toString(),
+                                        pswrdInput.getText().toString(),imgurl.toString());
 
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
