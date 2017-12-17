@@ -33,7 +33,7 @@ public class OrganizerRegister extends AppCompatActivity {
     Button register;
     RequestQueue requestQueue;
 
-    String url = "http://10.10.11.144:3000/register/";
+    String url = "http://10.10.28.104:3000/register/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

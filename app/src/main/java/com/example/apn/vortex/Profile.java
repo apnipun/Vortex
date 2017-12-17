@@ -54,8 +54,8 @@ public class Profile extends AppCompatActivity {
 
     private List<EventListItem> eventListItems;
 
-    String eventsUrl = "http://10.10.11.144:3000/geteventdata/";
-    String uploadImgUrl = "http://10.10.11.144:3000/upload/";
+    String eventsUrl = "http://10.10.28.104:3000/geteventdata/";
+    String uploadImgUrl = "http://10.10.28.104:3000/upload/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

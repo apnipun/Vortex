@@ -34,7 +34,7 @@ public class OrganizerLogin extends AppCompatActivity {
 
     UserSessionManager session;
 
-    String url = "http://10.10.11.144:3000/login/";
+    String url = "http://10.10.28.104:3000/login/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
