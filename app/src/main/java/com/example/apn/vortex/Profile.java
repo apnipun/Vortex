@@ -77,7 +77,7 @@ public class Profile extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
-        fname = bundle.getString("fname");
+        fname = bundle.getString("fullName");
         profilePicUrl = bundle.getString("imgurl");
 
         userName.setText(fname);
@@ -99,14 +99,16 @@ public class Profile extends AppCompatActivity {
                 Intent o = new Intent(Profile.this,CreateEvents.class);
                 Bundle b = new Bundle();
                 b.putString("id", id.toString());
+                b.putString("fullName", fname.toString());
+                b.putString("imgurl", profilePicUrl.toString());
                 o.putExtras(b);
+                o.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(o);
             }
         });
 
 
         eventListItems = new ArrayList<>();
-
         loadRecyclerViewData();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -257,8 +259,12 @@ public class Profile extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-        startActivity(new Intent(Profile.this,MainActivity.class));
+       Intent x =  new Intent(Profile.this,MainActivity.class);
+        x.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(x);
         finish();
     }
+
+    
 
 }

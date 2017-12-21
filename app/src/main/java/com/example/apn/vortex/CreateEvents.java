@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,13 +40,12 @@ import java.util.Map;
 
 public class CreateEvents extends AppCompatActivity implements View.OnClickListener {
     UserSessionManager session;
-    String email,password;
     RequestQueue requestQueue;
     EditText eventDate,eventTime;
     Button themePhoto,createEvent;
     Bitmap bitmap;
     String id,imgurl,fname;
-    String loginurl = "http://10.10.28.104:3000/login/";
+
     String createventUrl = "http://10.10.28.104:3000/createvent/";
 
     private int mYear, mMonth, mDay, mHour, mMinute;
@@ -74,6 +75,8 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
 
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
+        fname = bundle.getString("fullName");
+        imgurl = bundle.getString("imgurl");
 
        themePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +131,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
                 new Response.Listener<NetworkResponse>() {
                     @Override
                     public void onResponse(NetworkResponse response) {
+                        progressDialog.dismiss();
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             Toast.makeText(getApplicationContext(),  obj.getString("msg"), Toast.LENGTH_SHORT).show();
@@ -230,5 +234,17 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
             timePickerDialog.show();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent x =  new Intent(CreateEvents.this,Profile.class);
+        Bundle b = new Bundle();
+        b.putString("id", id.toString());
+        b.putString("fname", fname.toString());
+        b.putString("imgurl", imgurl.toString());
+        x.putExtras(b);
+        startActivity(x);
     }
 }

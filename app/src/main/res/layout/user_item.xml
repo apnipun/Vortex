@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:id="@+id/userselectitem"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/searchusername"
+            android:layout_width="360dp"
+            android:layout_height="50dp"
+            android:text="cdcdd"
+            android:paddingLeft="80dp"
+            android:paddingTop="15dp"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userpic"
+            android:layout_marginLeft="-350dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/user"/>
+
+        <Button
+            android:id="@+id/addorganizer"
+            android:layout_marginLeft="140dp"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="Add"
+            />
+
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

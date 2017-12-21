@@ -35,7 +35,8 @@
         <activity android:name=".OrganizerRegister" />
         <activity android:name=".SupplierRegister" />
         <activity android:name=".Profile" />
-        <activity android:name=".CreateEvents"></activity>
+        <activity android:name=".CreateEvents" />
+        <activity android:name=".ManageEvent"></activity>
     </application>
 
 </manifest>

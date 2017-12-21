@@ -106,9 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
-            super.onBackPressed();
+           // super.onBackPressed();
         }else {
-            finish();
+           finish();
         }
 
     }
@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.inflateMenu(R.menu.drawermenu);
                 break;
             case R.id.about:
+                Intent o = new Intent(MainActivity.this, ManageEvent.class);
+                startActivity(o);
                 break;
 
         }
@@ -180,11 +182,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 String id = response.getString("id");
                                 String  fname = response.getString("fname");
                                 String imgurl = response.getString("imgurl");
+                                String lname = response.getString("lname");
+                                String fullName = fname + " " + lname;
 
                                 Intent l = new Intent(MainActivity.this,Profile.class);
                                 Bundle b = new Bundle();
                                 b.putString("id", id.toString());
-                                b.putString("fname", fname.toString());
+                                b.putString("fullName", fullName.toString());
                                 b.putString("imgurl", imgurl.toString());
                                 l.putExtras(b);
                                 startActivity(l);

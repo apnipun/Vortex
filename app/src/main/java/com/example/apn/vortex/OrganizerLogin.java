@@ -93,6 +93,8 @@ public class OrganizerLogin extends AppCompatActivity {
                                 String id = response.getString("id");
                                 String fname = response.getString("fname");
                                 String imgurl = response.getString("imgurl");
+                                String lname = response.getString("lname");
+                                String fullName = fname + " " + lname;
 
                                 session.createUserLoginSession(emailInput.getText().toString(),
                                         pswrdInput.getText().toString(),imgurl.toString());
@@ -100,7 +102,7 @@ public class OrganizerLogin extends AppCompatActivity {
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
                                 b.putString("id", id.toString());
-                                b.putString("fname", fname.toString());
+                                b.putString("fullName", fullName.toString());
                                 b.putString("imgurl", imgurl.toString());
                                 l.putExtras(b);
                                 startActivity(l);
