@@ -3,15 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="#333639"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.apn.vortex.MainActivity"
 
     >
-    <LinearLayout
-        android:background="@drawable/background"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:text="Featured Events"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textStyle="italic"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></LinearLayout>
+        android:layout_height="50dp" />
+</RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
+            android:id="@+id/coverFlow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:coverHeight="200dp"
+            app:coverWidth="140dp"
+            app:maxScaleFactor="1.5"
+            app:reflectionGap="0px"
+            app:rotationThreshold="0.5"
+            app:scalingThreshold="0.5"
+            app:spacing="0.6"
+            >
+
+
+
+        </it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow>
+
+        <TextSwitcher
+            android:id="@+id/title"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TextSwitcher>
+
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

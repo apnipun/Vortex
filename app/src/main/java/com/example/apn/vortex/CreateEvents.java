@@ -11,10 +11,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,6 +29,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,26 +44,34 @@ import java.util.Locale;
 import java.util.Map;
 
 public class CreateEvents extends AppCompatActivity implements View.OnClickListener {
-    UserSessionManager session;
+    //UserSessionManager session;
     RequestQueue requestQueue;
     EditText eventDate,eventTime;
     Button themePhoto,createEvent;
     Bitmap bitmap;
-    String id,imgurl,fname;
+    String id,imgurl,fname,addeventName,password;
 
-    String createventUrl = "http://10.10.28.104:3000/createvent/";
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
+
+    String createventUrl = "http://192.168.8.100:3000/api/event/createvent2/";
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-    EditText eventName, eventVanue, eventLocation, eventDescription;
+    Spinner eventtype;
+
+    String etype;
+
+    EditText eventName, eventLocation, eventDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_events);
 
+
+
         eventName = (EditText) findViewById(R.id.editText3);
-        eventVanue = (EditText) findViewById(R.id.editText);
+        eventtype = (Spinner) findViewById(R.id.editText);
         eventLocation = (EditText) findViewById(R.id.editText7);
         eventDescription = (EditText) findViewById(R.id.editText2);
         themePhoto  = (Button) findViewById(R.id.add);
@@ -66,7 +79,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
         eventDate = (EditText) findViewById(R.id.editText5);
         eventTime = (EditText) findViewById(R.id.editText6);
 
-        session = new UserSessionManager(getApplicationContext());
+      //  session = new UserSessionManager(getApplicationContext());
         requestQueue = Volley.newRequestQueue(this);
 
 
@@ -77,6 +90,17 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
         id = bundle.getString("id");
         fname = bundle.getString("fullName");
         imgurl = bundle.getString("imgurl");
+        addeventName = bundle.getString("eventName");
+        password = bundle.getString("password");
+
+        eventName.setText(addeventName);
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(CreateEvents.this,
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.eventType));
+                myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                eventtype.setAdapter(myAdapter);
+
+        etype = eventtype.getSelectedItem().toString();
 
        themePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +116,9 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
                uploadData(bitmap);
             }
         });
+
+        //Back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -143,7 +170,7 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
                             Intent l = new Intent(getApplicationContext(),Profile.class);
                             Bundle b = new Bundle();
                             b.putString("id", id.toString());
-                            b.putString("fname", fname.toString());
+                            b.putString("fullName", fname.toString());
                             b.putString("imgurl", imgurl.toString());
                             l.putExtras(b);
                             startActivity(l);
@@ -168,9 +195,10 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
                 params.put("ename",eventName.getText().toString());
                 params.put("edate",eventDate.getText().toString());
                 params.put("etime",eventTime.getText().toString());
-                params.put("evanue",eventVanue.getText().toString());
+                params.put("eventType",etype.toString());
                 params.put("location",eventLocation.getText().toString());
                 params.put("edescription",eventDescription.getText().toString());
+                params.put("password",password.toString());
                 return params;
             }
 
@@ -178,13 +206,20 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
                 long imagename = System.currentTimeMillis();
-                params.put("themePic", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                params.put("uploads[]", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
                 return params;
             }
         };
 
 
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
+
+        {
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put(eventName.getText().toString(),"");
+            root.updateChildren(map);
+
+        }
     }
 
 
@@ -236,13 +271,23 @@ public class CreateEvents extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //back button operation
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent x =  new Intent(CreateEvents.this,Profile.class);
         Bundle b = new Bundle();
         b.putString("id", id.toString());
-        b.putString("fname", fname.toString());
+        b.putString("fullName", fname.toString());
         b.putString("imgurl", imgurl.toString());
         x.putExtras(b);
         startActivity(x);

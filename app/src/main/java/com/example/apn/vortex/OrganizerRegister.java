@@ -22,18 +22,21 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OrganizerRegister extends AppCompatActivity {
 
     EditText fname;
     EditText lname;
+    EditText userName;
     EditText remail;
     EditText password;
     EditText rePassword;
     Button register;
     RequestQueue requestQueue;
 
-    String url = "http://10.10.28.104:3000/register/";
+    String url = "http://192.168.8.100:3000/api/register/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +46,13 @@ public class OrganizerRegister extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         fname = (EditText) findViewById(R.id.fname);
         lname = (EditText) findViewById(R.id.lname);
+        userName = (EditText) findViewById(R.id.editText9);
         remail = (EditText) findViewById(R.id.regEmail);
         password = (EditText) findViewById(R.id.regPassword);
         rePassword = (EditText) findViewById(R.id.reEnPassword);
         register = (Button)findViewById(R.id.register);
+
+        setTitle("Registration For Organizers");
 
         setClearErrorsListeners();
 
@@ -61,10 +67,12 @@ public class OrganizerRegister extends AppCompatActivity {
     // register class
     public void register(){
         Map<String, String> jsonParams = new HashMap<String, String>();
-        jsonParams.put("fname",fname.getText().toString());
-        jsonParams.put("lname",lname.getText().toString());
+        jsonParams.put("firstname",fname.getText().toString());
+        jsonParams.put("lastname",lname.getText().toString());
+        jsonParams.put("username",userName.getText().toString());
         jsonParams.put("email",remail.getText().toString());
         jsonParams.put("password",password.getText().toString());
+        jsonParams.put("usertype","organizer");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,url,new JSONObject(jsonParams),
                 new Response.Listener<JSONObject>() {
@@ -117,6 +125,13 @@ public class OrganizerRegister extends AppCompatActivity {
             }
         });
 
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userName.setError(null);
+            }
+        });
+
         password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,10 +154,16 @@ public class OrganizerRegister extends AppCompatActivity {
             }
         });
     }
+
+
     // validations
     private void attemptRegister() {
 
         boolean okfname = isFnameEmpty();
+        if (!okfname)
+            return;
+
+        boolean okusername = isUserNameEmpty();
         if (!okfname)
             return;
 
@@ -158,7 +179,7 @@ public class OrganizerRegister extends AppCompatActivity {
         if (!okPassword)
             return;
 
-        boolean all = okEmail && okPassword && okfname && oklname;
+        boolean all = okEmail && okPassword && okfname && oklname&& okusername;
 
         if (all) {
             register();
@@ -166,6 +187,16 @@ public class OrganizerRegister extends AppCompatActivity {
     }
 
     private boolean isFnameEmpty(){
+        String vfname = userName.getText().toString();
+        if (TextUtils.isEmpty(vfname)) {
+            userName.setError(getString(R.string.error_field_required));
+            userName.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isUserNameEmpty(){
         String vfname = fname.getText().toString();
         if (TextUtils.isEmpty(vfname)) {
             fname.setError(getString(R.string.error_field_required));
@@ -216,8 +247,25 @@ public class OrganizerRegister extends AppCompatActivity {
             rePassword.setError(getString(R.string.error_password_is_not_matching));
             rePassword.requestFocus();
             return false;
+        }else if(!(isValidPassword1(p1))){
+            password.setError("Password strength is low");
+            password.requestFocus();
+            return false;
+
         }
+
 
         return true;
     }
+
+    public static boolean isValidPassword1(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
 }

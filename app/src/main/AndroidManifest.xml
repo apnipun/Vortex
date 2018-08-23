@@ -36,7 +36,11 @@
         <activity android:name=".SupplierRegister" />
         <activity android:name=".Profile" />
         <activity android:name=".CreateEvents" />
-        <activity android:name=".ManageEvent"></activity>
+        <activity android:name=".ManageEvent" />
+        <activity android:name=".ChatForEvent" />
+        <activity android:name=".SupplierProfile" />
+        <activity android:name=".CreateAdzForSupplier" />
+        <activity android:name=".HomeEventDetalis"></activity>
     </application>
 
 </manifest>

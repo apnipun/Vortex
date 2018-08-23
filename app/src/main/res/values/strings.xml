@@ -10,4 +10,18 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_password_is_not_matching">Password is not matching with previous</string>
     <string name="error_field_required">This field is required</string>
+
+    <string-array name="eventType">
+        <item>Public</item>
+        <item>Private</item>
+    </string-array>
+
+    <string-array name="spType">
+        <item>ENTERTAINMENT</item>
+        <item>PHOTOGRAPHY</item>
+        <item>FLOWERS</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

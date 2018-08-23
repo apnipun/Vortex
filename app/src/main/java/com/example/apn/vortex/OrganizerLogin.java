@@ -34,7 +34,7 @@ public class OrganizerLogin extends AppCompatActivity {
 
     UserSessionManager session;
 
-    String url = "http://10.10.28.104:3000/login/";
+    String url = "http://192.168.8.100:3000/api/loginorganizer/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class OrganizerLogin extends AppCompatActivity {
                                 String fullName = fname + " " + lname;
 
                                 session.createUserLoginSession(emailInput.getText().toString(),
-                                        pswrdInput.getText().toString(),imgurl.toString());
+                                        pswrdInput.getText().toString(),imgurl.toString(),"organizer");
 
                                 Intent l = new Intent(OrganizerLogin.this,Profile.class);
                                 Bundle b = new Bundle();
@@ -107,7 +107,8 @@ public class OrganizerLogin extends AppCompatActivity {
                                 l.putExtras(b);
                                 startActivity(l);
                             }else{
-                                Toast.makeText(getApplicationContext(),"Incorrect email or password", Toast.LENGTH_SHORT).show();
+
+                                Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -119,7 +120,7 @@ public class OrganizerLogin extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(),"Connection Fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Input email and password", Toast.LENGTH_SHORT).show();
 
                     }
                 }

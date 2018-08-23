@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/supplier_login_background"
     tools:context="com.example.apn.vortex.OrganizerRegister"
     >
 
@@ -23,11 +24,11 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/fname"
+        android:layout_alignBottom="@+id/fname"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/fname"
         android:layout_marginStart="29dp"
-        android:text="First Name"
-        android:layout_alignBottom="@+id/fname" />
+        android:text="First Name" />
 
     <EditText
         android:id="@+id/lname"
@@ -35,28 +36,27 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/fname"
         android:layout_below="@+id/fname"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="21dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/regEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
+        android:layout_alignStart="@+id/lname"
+        android:layout_below="@+id/editText9"
+        android:layout_marginTop="13dp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:layout_below="@+id/lname"
-        android:layout_alignStart="@+id/lname" />
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/regPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/regEmail"
+        android:layout_alignStart="@+id/regEmail"
         android:layout_below="@+id/regEmail"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="23dp"
         android:ems="10"
         android:inputType="textPassword" />
 
@@ -64,25 +64,28 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_alignTop="@+id/lname"
+        android:layout_alignBaseline="@+id/lname"
+        android:layout_alignBottom="@+id/lname"
+        android:layout_alignEnd="@+id/textView2"
         android:text="Last Name" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regEmail"
+        android:layout_alignBottom="@+id/regEmail"
         android:layout_alignStart="@+id/textView3"
-        android:layout_alignTop="@+id/regEmail"
         android:text="Email" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password"
-        android:layout_alignTop="@+id/regPassword"
-        android:layout_alignStart="@+id/textView4" />
+        android:layout_alignBaseline="@+id/regPassword"
+        android:layout_alignBottom="@+id/regPassword"
+        android:layout_alignStart="@+id/textView4"
+        android:text="Password" />
 
     <Button
         android:id="@+id/register"
@@ -98,18 +101,37 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/register"
         android:layout_alignStart="@+id/textView5"
-        android:layout_below="@+id/regPassword"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="14dp"
         android:text="Reenter Password" />
 
     <EditText
         android:id="@+id/reEnPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/regPassword"
-        android:layout_below="@+id/regPassword"
-        android:layout_marginTop="30dp"
+        android:layout_alignBottom="@+id/textView8"
+        android:layout_alignStart="@+id/regPassword"
         android:ems="10"
         android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText9"
+        android:layout_alignBottom="@+id/editText9"
+        android:layout_alignEnd="@+id/textView3"
+        android:text="User Name" />
+
+    <EditText
+        android:id="@+id/editText9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/regEmail"
+        android:layout_below="@+id/lname"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+         />
+
 </RelativeLayout>

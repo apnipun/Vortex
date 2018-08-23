@@ -41,6 +41,10 @@ public class UserSessionManager {
     public static final String KEY_EMAIL = "email";
 
 
+    public static final String KEY_USERTYPE = "usertype";
+
+
+
     public UserSessionManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREFER_NAME, PRIVATE_MODE);
@@ -48,12 +52,13 @@ public class UserSessionManager {
     }
 
 
-    public void createUserLoginSession(String email, String password,String imgurl){
+    public void createUserLoginSession(String email, String password,String imgurl,String usertype){
 
         editor.putBoolean(IS_USER_LOGIN, true);
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_PASSWORD, password);
         editor.putString(KEY_IMGURL, imgurl );
+        editor.putString(KEY_USERTYPE, usertype );
 
 
         editor.commit();
@@ -80,6 +85,8 @@ public class UserSessionManager {
         user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
 
         user.put(KEY_IMGURL, pref.getString(KEY_IMGURL, null));
+
+        user.put(KEY_USERTYPE, pref.getString(KEY_USERTYPE, null));
 
         return user;
     }

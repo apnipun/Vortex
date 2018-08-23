@@ -29,8 +29,9 @@ public class SupplierLogin extends AppCompatActivity {
     Button login;
     Button register;
     RequestQueue requestQueue;
+    UserSessionManager session;
 
-    String url = "http://192.168.1.100:3000/login/";
+    String url = "http://192.168.8.100:3000/api/loginsupplier/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +40,14 @@ public class SupplierLogin extends AppCompatActivity {
         setContentView(R.layout.activity_supplier_login);
 
 
+
         emailInput = (EditText)findViewById(R.id.email);
         pswrdInput = (EditText)findViewById(R.id.password);
         login = (Button)findViewById(R.id.button);
         requestQueue = Volley.newRequestQueue(this);
         register = (Button) findViewById(R.id.loginRegister);
+
+        session = new UserSessionManager(getApplicationContext());
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,11 +86,27 @@ public class SupplierLogin extends AppCompatActivity {
                             String msg = response.getString("msg");
                             if( msg.equals("success") ){
                                 Toast.makeText(getApplicationContext(),"Login successfully", Toast.LENGTH_SHORT).show();
-                                //Intent l = new Intent(MainActivity.this,Login_view.class);
-                                //startActivity(l);
+
+                                String id = response.getString("id");
+                                String fname = response.getString("fname");
+                                String imgurl = response.getString("imgurl");
+                                String lname = response.getString("lname");
+                                String fullName = fname + " " + lname;
+
+                                session.createUserLoginSession(emailInput.getText().toString(),
+                                        pswrdInput.getText().toString(),imgurl.toString(),"service_provider");
+
+                                Intent l = new Intent(SupplierLogin.this,SupplierProfile.class);
+                                Bundle b = new Bundle();
+                                b.putString("id", id.toString());
+                                b.putString("fullName", fullName.toString());
+                                b.putString("imgurl", imgurl.toString());
+                                l.putExtras(b);
+                                startActivity(l);
+
                             }else
                             {
-                                Toast.makeText(getApplicationContext(),"Incorrect email or password", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -98,7 +118,7 @@ public class SupplierLogin extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(),"Connection Fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Input email and password", Toast.LENGTH_SHORT).show();
 
                     }
                 }

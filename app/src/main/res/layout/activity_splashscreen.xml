@@ -8,10 +8,18 @@
     android:gravity="center"
     android:orientation="vertical" >
 
+
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:src="@drawable/logo_ic"
+        android:layout_width="150dp"
+        android:layout_height="100dp" />
+
     <ImageView
         android:id="@+id/splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/user" />
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/splash_ic" />
 
 </LinearLayout>

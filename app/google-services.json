@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "119566736594",
+    "firebase_url": "https://vortexchat-566a6.firebaseio.com",
+    "project_id": "vortexchat-566a6",
+    "storage_bucket": "vortexchat-566a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119566736594:android:6e7f9980f33d14ec",
+        "android_client_info": {
+          "package_name": "com.example.apn.vortex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119566736594-cgbf1snpent6utncahvckotdvgjn1j5h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOYy8C09qls_CQg2gvlDCahHJO9fGDF-Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

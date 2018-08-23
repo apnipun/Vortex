@@ -1,6 +1,8 @@
 package com.example.apn.vortex;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,10 +40,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        EventListItem eventListItem = eventListItems.get(position);
+        final EventListItem eventListItem = eventListItems.get(position);
 
         holder.textViewHead.setText(eventListItem.getHead());
         holder.textViewdesc.setText(eventListItem.getDesc());
+        holder.description.setText(eventListItem.getDesription());
+        holder.time.setText(eventListItem.getTime());
 
         Picasso.with(context)
                 .load(eventListItem.getImgUrl())
@@ -50,7 +54,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"event details", Toast.LENGTH_SHORT).show();
+                Intent l = new Intent(context,ManageEvent.class);
+                Bundle b = new Bundle();
+                   b.putString("userId", eventListItem.getUserId().toString());
+                b.putString("userName", eventListItem.getUserName().toString());
+                b.putString("eventId", eventListItem.getEventId().toString());
+                b.putString("ename", eventListItem.getHead().toString());
+               // b.putString("description", eventListItem.getDesription().toString());
+               // b.putString("eventImgurl", eventListItem.getImgUrl().toString());
+                //b.putString("time", eventListItem.getTime().toString());
+                l.putExtras(b);
+                context.startActivity(l);
             }
         });
 
@@ -65,6 +79,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public TextView textViewHead;
         public TextView textViewdesc;
+        public TextView description;
+        public TextView time;
         public ImageView imageView;
         public LinearLayout linearLayout;
 
@@ -73,6 +89,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHeader);
             textViewdesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+            description = (TextView) itemView.findViewById(R.id.descripton);
+            time = (TextView) itemView.findViewById(R.id.time);
             imageView = (ImageView) itemView.findViewById(R.id.eventthemephoto);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.layoutevent);
         }

@@ -3,6 +3,7 @@ package com.example.apn.vortex;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,7 +29,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by APN on 12/19/2017.
@@ -36,8 +39,9 @@ import java.util.List;
 
 public class SearchUsersFragment extends DialogFragment implements SearchView.OnQueryTextListener{
 
-    String getUSerUrl = "http://10.10.28.104:3000/users/";
+    String getUSerUrl ;
 
+    String eventId,tag;
     private RecyclerView recyclerView;
 
     private UserItemSearchAdapter adapter;
@@ -46,8 +50,9 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
 
     SearchView searchView;
 
-    //Button addOrganizer;
+    FragmentManager manager;
 
+    String tag2;
 
     @Nullable
     @Override
@@ -57,16 +62,32 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
 
         View rootView = inflater.inflate(R.layout.search_user_fragment,container);
 
+        if (getArguments() != null) {
+            tag = getArguments().getString("tag");
+            eventId = getArguments().getString("id");
+        }
+
+        if(tag.equals("sltorg")){
+          getUSerUrl  = "http://192.168.8.100:3000/api/event/users/";
+          tag2 = "sltorg";
+
+        }else {
+            getUSerUrl = "http://192.168.8.100:3000/api/add/getsearchserviceproviders/";
+            tag2 = "sltsp";
+        }
+
         searchView = (SearchView) rootView.findViewById(R.id.searchview);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.useritem);
-       // addOrganizer = (Button) rootView.findViewById(R.id.addorganizer);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         userItemLists = new ArrayList<>();
-        loadRecyclerViewData();
 
-        this.getDialog().setTitle("Select Organizers");
+
+        loadRecyclerViewData();
+        this.getDialog().setTitle("Select Person");
         searchView.setOnQueryTextListener(this);
+
+         manager = getFragmentManager();
 
         return rootView;
     }
@@ -75,7 +96,11 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
 
     private void loadRecyclerViewData(){
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,getUSerUrl,null,
+        Map<String, String> jsonParams = new HashMap<String, String>();
+        jsonParams.put("eventId",eventId.toString());
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,getUSerUrl,new JSONObject(jsonParams),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -84,11 +109,11 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
 
                             for (int i = 0 ;i<array.length(); i++){
                                 JSONObject o = array.getJSONObject(i);
-                                final String name = o.getString("fname") + " " + o.getString("lname");
-                                UserItemList userItemList = new UserItemList(o.getString("_id"),name,o.getString("imgurl"));
+                                final String name = o.getString("firstname") + " " + o.getString("lastname");
+                                UserItemList userItemList = new UserItemList(o.getString("_id"),name,o.getString("imgurl"),tag2);
                                 userItemLists.add(userItemList);
                             }
-                            adapter = new UserItemSearchAdapter(userItemLists,getActivity().getApplicationContext());
+                            adapter = new UserItemSearchAdapter(userItemLists,getActivity().getApplicationContext(),manager);
                             recyclerView.setAdapter(adapter);
 
                         } catch (JSONException e) {
@@ -99,7 +124,7 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity().getApplicationContext(),"Connection Fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(),"Connection Fails", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -126,6 +151,8 @@ public class SearchUsersFragment extends DialogFragment implements SearchView.On
         adapter.setFilter(newList);
         return true;
     }
+
+
 }
 
 

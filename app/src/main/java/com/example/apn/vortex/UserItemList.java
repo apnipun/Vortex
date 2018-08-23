@@ -9,6 +9,7 @@ public class UserItemList {
     private String id;
     private String userName;
     private String userImg;
+    private String tag;
 
     public String getUserImg() {
         return userImg;
@@ -18,10 +19,15 @@ public class UserItemList {
         return userName;
     }
 
-    public UserItemList(String id,String userName,String userImg) {
+    public String getTag() {
+        return tag;
+    }
+
+    public UserItemList(String id, String userName, String userImg, String tag) {
         this.id = id;
         this.userName = userName;
         this.userImg = userImg;
+        this.tag = tag;
     }
 
 

@@ -4,7 +4,7 @@
 
     <item android:id="@+id/home" android:title="Home" android:icon="@drawable/ic_home"/>
     <item android:id="@+id/All_events" android:title="All Events" android:icon="@drawable/ic_event"/>
-    <item android:id="@+id/org_login" android:title="Your Profile" android:icon="@drawable/ic_about"/>
+    <item android:id="@+id/login" android:title="Your Profile" android:icon="@drawable/ic_about"/>
     <item android:id="@+id/logout" android:title="Logout" android:icon="@drawable/ic_logout"/>
     <item android:id="@+id/about" android:title="About As" android:icon="@drawable/ic_about"/>
 

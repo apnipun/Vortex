@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SupplierRegister extends AppCompatActivity {
 
@@ -29,12 +33,14 @@ public class SupplierRegister extends AppCompatActivity {
     EditText fname;
     EditText lname;
     EditText remail;
+    EditText userName;
     EditText password;
     EditText rePassword;
     Button register;
     RequestQueue requestQueue;
+    Spinner serviceProviderType;
 
-    String url = "http://10.10.18.125:3000/register/";
+    String url = "http://192.168.8.100:3000/api/register/";
 
 
     @Override
@@ -45,10 +51,20 @@ public class SupplierRegister extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         fname = (EditText) findViewById(R.id.fname);
         lname = (EditText) findViewById(R.id.lname);
+        userName = (EditText) findViewById(R.id.editText12);
         remail = (EditText) findViewById(R.id.regEmail);
         password = (EditText) findViewById(R.id.regPassword);
         rePassword = (EditText) findViewById(R.id.reEnPassword);
         register = (Button)findViewById(R.id.register);
+        serviceProviderType = (Spinner) findViewById(R.id.serviceprovidertype);
+
+
+        setTitle("Registration For Suppliers");
+
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(SupplierRegister.this,
+                android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.spType));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceProviderType.setAdapter(myAdapter);
 
         setClearErrorsListeners();
 
@@ -64,10 +80,13 @@ public class SupplierRegister extends AppCompatActivity {
     // register class
     public void register(){
         Map<String, String> jsonParams = new HashMap<String, String>();
-        jsonParams.put("fname",fname.getText().toString());
-        jsonParams.put("lname",lname.getText().toString());
+        jsonParams.put("firstname",fname.getText().toString());
+        jsonParams.put("lastname",lname.getText().toString());
+        jsonParams.put("username",userName.getText().toString());
         jsonParams.put("email",remail.getText().toString());
         jsonParams.put("password",password.getText().toString());
+        jsonParams.put("usertype","service_provider");
+        jsonParams.put("spCatagory",serviceProviderType.getSelectedItem().toString());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,url,new JSONObject(jsonParams),
                 new Response.Listener<JSONObject>() {
@@ -120,6 +139,13 @@ public class SupplierRegister extends AppCompatActivity {
             }
         });
 
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userName.setError(null);
+            }
+        });
+
         password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,11 +183,15 @@ public class SupplierRegister extends AppCompatActivity {
         if (!okEmail)
             return;
 
+        boolean okusername = isUserNameEmpty();
+        if (!okfname)
+            return;
+
         boolean okPassword = isValidPassword();
         if (!okPassword)
             return;
 
-        boolean all = okEmail && okPassword && okfname && oklname;
+        boolean all = okEmail && okPassword && okfname && oklname && okusername;
 
         if (all) {
             register();
@@ -183,6 +213,16 @@ public class SupplierRegister extends AppCompatActivity {
         if (TextUtils.isEmpty(vlname)) {
             lname.setError(getString(R.string.error_field_required));
             lname.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isUserNameEmpty(){
+        String vfname = fname.getText().toString();
+        if (TextUtils.isEmpty(vfname)) {
+            fname.setError(getString(R.string.error_field_required));
+            fname.requestFocus();
             return false;
         }
         return true;
@@ -219,8 +259,24 @@ public class SupplierRegister extends AppCompatActivity {
             rePassword.setError(getString(R.string.error_password_is_not_matching));
             rePassword.requestFocus();
             return false;
-        }
+        } else if(!(isValidPassword1(p1))){
+        password.setError("Password strength is low");
+        password.requestFocus();
+        return false;
+
+    }
 
         return true;
     }
+
+    public static boolean isValidPassword1(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
 }

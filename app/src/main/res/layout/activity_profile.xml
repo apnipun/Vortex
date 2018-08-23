@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -194,10 +195,39 @@
 
 
     </LinearLayout>
+       <TextView
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="50dp"
+           android:text="Your events"
+           android:textSize="20dp"
+           android:layout_marginLeft="50dp"
+           />
+
        <android.support.v7.widget.RecyclerView
            android:layout_marginTop="20dp"
            android:focusableInTouchMode="false"
            android:id="@+id/recyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+       <TextView
+           android:layout_marginTop="20dp"
+           android:layout_width="match_parent"
+           android:layout_height="50dp"
+           android:text="Add events to organize"
+           android:textSize="20dp"
+           android:layout_marginLeft="50dp"
+           />
+
+
+
+
+
+       <android.support.v7.widget.RecyclerView
+           android:layout_marginTop="20dp"
+           android:focusableInTouchMode="false"
+           android:id="@+id/recyclerView1"
            android:layout_width="match_parent"
            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 

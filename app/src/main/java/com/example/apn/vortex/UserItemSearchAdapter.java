@@ -1,5 +1,7 @@
 package com.example.apn.vortex;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,19 +41,27 @@ import java.util.Map;
 public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAdapter.ViewHolder> {
 
     private List<UserItemList> userItemLists;
+    SupplierViewFragment supplierViewFragment;
 
-    String selectedUserInfoUrl = "http://10.10.28.104:3000/selecteduser/";
 
 
-    public UserItemSearchAdapter(List<UserItemList> userItemLists, Context context) {
+
+    String selectedUserInfoUrl = "http://192.168.8.100:3000/api/add/selecteduser/";
+
+
+    public UserItemSearchAdapter(List<UserItemList> userItemLists, Context context,FragmentManager manager) {
         this.userItemLists = userItemLists;
         this.context = context;
-    }
+        this.manager = manager;
 
+    }
+    private  FragmentManager manager;
     private Context context;
 
     @Override
     public UserItemSearchAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_item,parent,false);
         return new ViewHolder(v);
@@ -69,7 +80,8 @@ public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAd
        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Selected", Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(context,"Selected", Toast.LENGTH_SHORT).show();
                 goToSelectedUser(userItemList.getId());
             }
         });
@@ -77,10 +89,17 @@ public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAd
        holder.addOrganizer.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent = new Intent("custom-message");
+
+
+              Intent intent = new Intent("custom-message");
+              // intent.putExtra("organizerImgUrl",userItemList.getUserImg());
                intent.putExtra("organizerName",userItemList.getUserName());
                intent.putExtra("id",userItemList.getId());
+               intent.putExtra("tag",userItemList.getTag());
+               intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+
 
            }
        });
@@ -106,6 +125,12 @@ public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAd
             imageView = (ImageView) itemView.findViewById(R.id.userpic);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.userselectitem);
             addOrganizer = (Button) itemView.findViewById(R.id.addorganizer);
+
+
+
+
+
+
         }
     }
 
@@ -139,15 +164,17 @@ public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAd
                                 String lname = response.getString("lname");
                                 String fullName = fname + " " + lname;
 
-                                Intent l = new Intent(context,Profile.class);
+                                Intent l = new Intent(context,SupplierViewFragment.class);
+
+
+                                supplierViewFragment = new SupplierViewFragment();
 
                                 Bundle b = new Bundle();
                                 b.putString("id", id.toString());
                                 b.putString("fullName", fullName.toString());
                                 b.putString("imgurl", imgurl.toString());
-                                l.putExtras(b);
-                                l.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(l);
+                                supplierViewFragment.setArguments(b);
+                                supplierViewFragment.show(manager,"Search_user_for_service");
                             }else{
                                 Toast.makeText(context,"Incorrect email or password", Toast.LENGTH_SHORT).show();
                             }
@@ -169,6 +196,8 @@ public class UserItemSearchAdapter extends RecyclerView.Adapter<UserItemSearchAd
         requestQueue.add(jsonObjectRequest);
 
     }
+
+
 
 
 

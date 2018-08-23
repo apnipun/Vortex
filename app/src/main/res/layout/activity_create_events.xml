@@ -51,7 +51,7 @@
         android:layout_alignStart="@+id/textView10"
         android:layout_below="@+id/textView11"
         android:layout_marginTop="34dp"
-        android:text="Event Venue" />
+        android:text="Event type" />
 
     <TextView
         android:id="@+id/textView14"
@@ -98,7 +98,7 @@
         android:layout_alignEnd="@+id/editText"
         android:text="Add" />
 
-    <EditText
+    <Spinner
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -163,6 +163,7 @@
         android:layout_alignBottom="@+id/textView14"
         android:layout_alignEnd="@+id/editText2"
         android:ems="10" />
+
 
 
 </RelativeLayout>
